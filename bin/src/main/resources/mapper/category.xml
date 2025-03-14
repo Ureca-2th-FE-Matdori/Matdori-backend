@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 패키지 포함한 mapper(DAO interface) 이름으로 설정 한다. -->
+<mapper namespace="com.uplus.matdori.category.model.dao.CategoryDao">
+
+    <!-- 자주 사용하는 쿼리를 상용구 처럼 sql 태그를 이용해서 등록해서 재사용할 수 있다. -->
+    <sql id="searchCon">
+       <if test="key != 'all' and word != null and word != ''">
+          <choose>
+             <when test="key == 'title'">
+                title like concat('%', #{word}, '%')
+             </when>
+             <when test="key == 'author'">
+                author like concat('%', #{word}, '%')
+             </when>
+             <when test="key == 'isbn'">
+                isbn like concat('%', #{word}, '%')
+             </when>
+          </choose>
+       </if>
+    </sql>
+
+    <!--   id : mapping될 함수 이름으로 설정 
+          parameterType : 메서드 인자 타입 
+          resultType : 쿼리를 수행한 결과(컬럼 데이타)를 담을 클래스 타입
+                => returnType
+       미리 등록된 Alias: mybatis-xxx.jar > org.apache.ibatis.type.TypeAliasRegistry 에서 확인
+    -->
+    <select id="search"    parameterType="int" resultType="String">
+       SELECT category_name
+          -- mapping 하려는 속성명이 컬럼명과 같아야함
+          -- 혹시 다르면 alias 이용해서 속성명과 맞춰줘야 함
+          -- 그것도 안되면 나중에 ResultMap을 통해서 맞춰줄 수 있다.
+       FROM 카테고리
+       WHERE category_id = #{category_id}
+    </select>
+    
+    <select id="insert" parameterType="Category">
+    	insert into 카테고리 (category_id, category_name) values (#{category_id}, #{category_name})
+    </select>
+    
+    <update id="delete" parameterType="int">
+    	delete from 카테고리 where category_id = #{category_id}
+    </update>
+    <!--
+       resultType은 select문을 수행한 결과 중 1개 row를 매핑할 타입을 설정한다.
+       MyBatis가 List 객체를 생성해서 매핑한 객체를 add 해준다.
+    -->
+    
+
+</mapper>
