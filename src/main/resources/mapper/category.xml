@@ -3,7 +3,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- namespace는 패키지 포함한 mapper(DAO interface) 이름으로 설정 한다. -->
-<mapper namespace="com.uplus.matdori.category.model.dao.CategoryDao">
+<mapper namespace="com.uplus.matdori.categoryDTO.model.dao.CategoryDao">
 
     <!-- 자주 사용하는 쿼리를 상용구 처럼 sql 태그를 이용해서 등록해서 재사용할 수 있다. -->
     <sql id="searchCon">
