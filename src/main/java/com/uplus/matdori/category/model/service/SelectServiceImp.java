@@ -22,27 +22,23 @@ public class SelectServiceImp implements SelectService {
     }
 
     @Override
-    public CategoryDTO getRandomCategory() {
-        int randomId = random.nextInt(15) + 1;
-        return categoryDAO.getCategoryById(randomId);
+    public String getRandomCategory() {
+        int randomId = random.nextInt(15) + 1; // 1~15 랜덤 숫자 생성
+        return categoryDAO.search(randomId);
     }
 
     @Override
-    public CategoryDTO getPreferredCategory(String userId) {
+    public String getPreferredCategory(String userId) {
         UserDTO user = userDAO.getUserById(userId);
+        List<Integer> categoryVisits = user.getCategoryVisits(); // List<Integer>로 변경
+
         int maxVisits = 0, bestCategory = 1;
-        for (int i = 0; i < user.getCategoryVisits().length; i++) {
-            if (user.getCategoryVisits()[i] > maxVisits) {
-                maxVisits = user.getCategoryVisits()[i];
+        for (int i = 0; i < categoryVisits.size(); i++) { // .length → .size() 사용
+            if (categoryVisits.get(i) > maxVisits) { // 배열 인덱싱 → get(i) 사용
+                maxVisits = categoryVisits.get(i);
                 bestCategory = i + 1;
             }
         }
-        return categoryDAO.getCategoryById(bestCategory);
-    }
-
-    @Override
-    public CategoryDTO getCompletelyRandomSelection() {
-        List<CategoryDTO> categories = categoryDAO.getAllCategories();
-        return categories.get(random.nextInt(categories.size()));
+        return categoryDAO.search(bestCategory);
     }
 }
