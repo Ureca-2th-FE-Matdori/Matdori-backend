@@ -1,7 +1,6 @@
 package com.uplus.matdori.category.model.service;
 
 import com.uplus.matdori.category.model.dao.HistoryDAO;
-import com.uplus.matdori.category.model.dto.CategoryDTO;
 import com.uplus.matdori.category.model.dto.HistoryDTO;
 import org.springframework.stereotype.Service;
 

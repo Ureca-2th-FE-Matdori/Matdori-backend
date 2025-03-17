@@ -1,25 +1,22 @@
 package com.uplus.matdori.category.model.dao;
 
-import com.uplus.matdori.category.model.dto.CategoryDTO;
 import com.uplus.matdori.category.model.dto.HistoryDTO;
-import org.apache.ibatis.annotations.*;
-
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
 public interface HistoryDAO {
-    @Select("SELECT * FROM 방문한_식당_히스토리 WHERE user_id2 = #{userId}")
+
+    // 특정 사용자의 방문 히스토리 조회
     List<HistoryDTO> getHistoryByUserId(@Param("userId") String userId);
 
-    @Insert("INSERT INTO 방문한_식당_히스토리 (user_id2, url, rate, history_id, category_id2) " +
-            "VALUES (#{userId}, #{url}, #{rate}, #{historyId}, #{categoryId})")
+    // 새로운 방문 히스토리 추가
     void insertHistory(HistoryDTO history);
 
-    @Update("UPDATE 방문한_식당_히스토리 SET rate = #{rate} WHERE history_id = #{historyId}")
+    // 평점 업데이트
     void updateRating(HistoryDTO history);
 
-    @Delete("DELETE FROM 방문한_식당_히스토리 WHERE history_id = #{historyId}")
+    // 방문 히스토리 삭제
     void deleteHistory(@Param("historyId") int historyId);
-
-    List<CategoryDTO> getCategoryRanking();
 }

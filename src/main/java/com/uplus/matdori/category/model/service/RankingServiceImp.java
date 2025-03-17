@@ -17,6 +17,6 @@ public class RankingServiceImp implements RankingService {
 
     @Override
     public List<CategoryDTO> getRankings() {
-        return historyDAO.getCategoryRanking();
+        return List.of();
     }
 }

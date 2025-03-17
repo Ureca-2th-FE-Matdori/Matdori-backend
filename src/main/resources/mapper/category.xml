@@ -3,7 +3,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- namespace는 패키지 포함한 mapper(DAO interface) 이름으로 설정 한다. -->
-<mapper namespace="com.uplus.matdori.categoryDTO.model.dao.CategoryDao">
+<mapper namespace="com.uplus.matdori.category.model.dao.CategoryDAO">
 
     <!-- 자주 사용하는 쿼리를 상용구 처럼 sql 태그를 이용해서 등록해서 재사용할 수 있다. -->
     <sql id="searchCon">
@@ -28,7 +28,7 @@
                 => returnType
        미리 등록된 Alias: mybatis-xxx.jar > org.apache.ibatis.type.TypeAliasRegistry 에서 확인
     -->
-    <select id="search"    parameterType="int" resultType="String">
+    <select id="search"    parameterType="java.lang.Integer" resultType="java.lang.String">
        SELECT category_name
           -- mapping 하려는 속성명이 컬럼명과 같아야함
           -- 혹시 다르면 alias 이용해서 속성명과 맞춰줘야 함
@@ -37,11 +37,11 @@
        WHERE category_id = #{category_id}
     </select>
     
-    <select id="insert" parameterType="Category">
+    <select id="insert" parameterType="com.uplus.matdori.category.model.dto.CategoryDTO">
     	insert into 카테고리 (category_id, category_name) values (#{category_id}, #{category_name})
     </select>
     
-    <update id="delete" parameterType="int">
+    <update id="delete" parameterType="java.lang.Integer">
     	delete from 카테고리 where category_id = #{category_id}
     </update>
     <!--

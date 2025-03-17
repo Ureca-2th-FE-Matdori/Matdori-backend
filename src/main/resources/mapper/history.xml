@@ -2,28 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.matdori.dao.HistoryDAO">
+<mapper namespace="com.uplus.matdori.category.model.dao.HistoryDAO">
 
     <!-- 회원별 방문한 식당 히스토리 조회 -->
-    <select id="getHistoryByUserId" parameterType="string" resultType="com.example.matdori.dto.HistoryDTO">
+    <select id="getHistoryByUserId" parameterType="java.lang.String" resultType="com.uplus.matdori.category.model.dto.HistoryDTO">
         SELECT * FROM 방문한_식당_히스토리 WHERE user_id2 = #{userId}
     </select>
 
     <!-- 새 히스토리 데이터 삽입 -->
-    <insert id="insertHistory" parameterType="com.example.matdori.dto.HistoryDTO">
+    <insert id="insertHistory" parameterType="com.uplus.matdori.category.model.dto.HistoryDTO">
         INSERT INTO 방문한_식당_히스토리 (user_id2, url, rate, history_id, category_id2)
         VALUES (#{userId}, #{url}, #{rate}, #{historyId}, #{categoryId})
     </insert>
 
     <!-- 평점 업데이트 -->
-    <update id="updateRating" parameterType="com.example.matdori.dto.HistoryDTO">
+    <update id="updateRating" parameterType="com.uplus.matdori.category.model.dto.HistoryDTO">
         UPDATE 방문한_식당_히스토리
         SET rate = #{rate}
         WHERE history_id = #{historyId}
     </update>
 
     <!-- 히스토리 삭제 -->
-    <delete id="deleteHistory" parameterType="int">
+    <delete id="deleteHistory" parameterType="java.lang.Integer">
         DELETE FROM 방문한_식당_히스토리 WHERE history_id = #{historyId}
     </delete>
 
