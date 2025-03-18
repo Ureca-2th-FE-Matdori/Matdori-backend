@@ -5,5 +5,6 @@ import com.uplus.matdori.category.model.dto.NaverLocalResponseDTO;
 
 public interface SelectService {
     NaverLocalResponseDTO getRandomCategory();
+  
     String getPreferredCategory(String userId);
 }

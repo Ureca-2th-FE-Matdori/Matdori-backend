@@ -60,7 +60,6 @@ public class SelectServiceImp implements SelectService {
         return searchPlaces(categoryName);
     }
 
-
     @Override
     public String getPreferredCategory(String userId) {
         UserDTO user = userDAO.getUserById(userId);
