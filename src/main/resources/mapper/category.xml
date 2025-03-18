@@ -48,6 +48,5 @@
        resultType은 select문을 수행한 결과 중 1개 row를 매핑할 타입을 설정한다.
        MyBatis가 List 객체를 생성해서 매핑한 객체를 add 해준다.
     -->
-    
 
 </mapper>
