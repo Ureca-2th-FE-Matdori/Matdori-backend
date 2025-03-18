@@ -15,4 +15,7 @@ public interface UserDAO {
 
     // 회원 정보 업데이트 (포인트 및 방문 카운트)
     void updateUser(UserDTO user);
+
+    // 특정 카테고리 방문 횟수 조회
+    int getCategoryVisitCount(@Param("userId") String userId, @Param("columnName") String columnName);
 }
