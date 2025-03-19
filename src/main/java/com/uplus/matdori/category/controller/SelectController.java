@@ -3,9 +3,12 @@ package com.uplus.matdori.category.controller;
 import com.uplus.matdori.category.model.dao.CategoryDAO;
 import com.uplus.matdori.category.model.dao.UserDAO;
 import com.uplus.matdori.category.model.dto.CategoryDTO;
+
+import com.uplus.matdori.category.model.dto.NaverLocalResponseDTO;
 import com.uplus.matdori.category.model.dto.UserDTO;
 import com.uplus.matdori.category.model.service.SelectService;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,13 +36,14 @@ import java.util.Random;
 
 //뽑기 관련 컨트롤러
 public class SelectController {
-    private final CategoryDAO categoryDAO;
-    private final UserDAO userDAO;
-    private final Random random = new Random();
+    private final SelectService selectService;
 
-    public SelectController(CategoryDAO categoryDAO, UserDAO userDAO) {
-        this.categoryDAO = categoryDAO;
-        this.userDAO = userDAO;
+    public SelectController(SelectService selectService) {
+        this.selectService = selectService;
     }
 
+    @GetMapping("/random")
+    public NaverLocalResponseDTO getRandomCategory() {
+        return selectService.getRandomCategory(); //JSON 형식으로 자동 변환되어 반환
+    }
 }
