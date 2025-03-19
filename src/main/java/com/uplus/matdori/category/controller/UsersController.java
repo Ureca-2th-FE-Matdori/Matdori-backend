@@ -1,6 +1,5 @@
 package com.uplus.matdori.category.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +11,6 @@ import com.uplus.matdori.category.model.dto.ApiResponse;
 import com.uplus.matdori.category.model.dto.UserDTO;
 import com.uplus.matdori.category.model.dto.UserResponseDto;
 import com.uplus.matdori.category.model.service.UsersService;
-
 
 @RestController
 
@@ -31,9 +29,8 @@ public class UsersController {
 
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
-        boolean success = usersService.login(userDTO.getUser_id(), userDTO.getPassword());
-        return success ? ResponseEntity.ok("Login Success") : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed");
+    public ResponseEntity<ApiResponse<UserResponseDto>> login(@RequestBody UserDTO userDTO) {
+       return usersService.login(userDTO.getUser_id(), userDTO.getPassword());
     }
 
     //회원가입(POST)

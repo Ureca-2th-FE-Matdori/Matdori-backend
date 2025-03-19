@@ -18,13 +18,32 @@ public class UsersServiceImp implements UsersService {
     public UsersServiceImp(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
-
-    public boolean login(String userId, String password) {
-        UserDTO user = userDAO.getUserById(userId);
-        return user != null && user.getPassword().equals(password);
-    }
    
-    // 아이디 중복 확인
+    //로그인
+    public ResponseEntity<ApiResponse<UserResponseDto>> login(String userId, String password) {
+    	
+    	try {
+    		//아이디 존재 여부 확인
+    		UserDTO user = userDAO.getUserById(userId);
+        
+    		//아이디가 존재 하지 않고 비밀번호가 일치 하지 않는다면 에러 메세지
+    		if(user == null || !user.getPassword().equals(password)) {
+    			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    					.body(ApiResponse.error("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요."));
+        
+    		}else {	
+    			// 아이디 비밀번호가 일치하면 로그인 성공
+    			UserResponseDto responseDto = new UserResponseDto(user.getUser_id());
+    			return ResponseEntity.ok(ApiResponse.success(responseDto));
+        		}
+    		// 글로벌 예외 처리로 500 에러 반환
+    	}catch(Exception e) {
+	         throw new RuntimeException(e);
+	    } 
+    }
+ 
+   
+    // 회원 가입 진행 시 아이디 중복 확인 (같은 아이디가 있다면 회원가입 false)
     public boolean checkUserId(String userId) {
     	UserDTO user = userDAO.getUserById(userId);
     	
@@ -38,9 +57,8 @@ public class UsersServiceImp implements UsersService {
     
     // 회원가입
     public ResponseEntity<ApiResponse<UserResponseDto>> createAccount(UserDTO userDTO) {
-
-    	if(checkUserId(userDTO.getUser_id())) {
     		// id가 null 값이 맞다면 가입 처리 진행
+    	if(checkUserId(userDTO.getUser_id())) {
     		// 정보 삽입
     		try {
     			userDAO.insertUser(userDTO);
@@ -53,14 +71,9 @@ public class UsersServiceImp implements UsersService {
     	    }
     		
     	} else {
-    		// 가입 실패 : 아이디 중복
+    		// 가입 실패 : 아이디 중복 (상태 코드 및 에러 메세지 전달)
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ApiResponse.error("이미 존재하는 아이디입니다!"));
-    	}
-
-        
+    	}    
     }
-  
-    
-
 }
