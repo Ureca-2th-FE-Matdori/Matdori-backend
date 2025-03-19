@@ -2,17 +2,22 @@ package com.uplus.matdori.category.controller;
 
 import com.uplus.matdori.category.model.dao.CategoryDAO;
 import com.uplus.matdori.category.model.dao.UserDAO;
+import com.uplus.matdori.category.model.dto.ApiResponse;
 import com.uplus.matdori.category.model.dto.CategoryDTO;
 
 import com.uplus.matdori.category.model.dto.NaverLocalResponseDTO;
 import com.uplus.matdori.category.model.dto.UserDTO;
 import com.uplus.matdori.category.model.service.SelectService;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /*
@@ -41,9 +46,9 @@ public class SelectController {
     public SelectController(SelectService selectService) {
         this.selectService = selectService;
     }
-
-    @GetMapping("/random")
-    public NaverLocalResponseDTO getRandomCategory() {
-        return selectService.getRandomCategory(); //JSON 형식으로 자동 변환되어 반환
+    
+    @GetMapping({"/random", "/random/{selectCategoryName}"})
+    public ResponseEntity<ApiResponse<NaverLocalResponseDTO>> getRandomCategory(@PathVariable Optional<String> selectCategoryName) {
+        return selectService.getRandomCategory(selectCategoryName.orElse(null));
     }
 }
