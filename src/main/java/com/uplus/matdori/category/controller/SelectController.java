@@ -47,7 +47,7 @@ public class SelectController {
         this.selectService = selectService;
     }
     
-    @GetMapping({"/random", "/random/{selectCategoryName}"})
+    @GetMapping({"/random", "/{selectCategoryName}"})
     public ResponseEntity<ApiResponse<NaverLocalResponseDTO>> getRandomCategory(@PathVariable Optional<String> selectCategoryName) {
         return selectService.getRandomCategory(selectCategoryName.orElse(null));
     }
