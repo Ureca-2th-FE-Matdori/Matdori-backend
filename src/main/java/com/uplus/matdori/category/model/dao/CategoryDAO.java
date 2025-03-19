@@ -15,6 +15,9 @@ public interface CategoryDAO {
 
 	// 카테고리 삭제
 	void delete(@Param("category_id") int categoryId);
+	
+	// 카테고리 존재 여부 확인
+	Integer checkCategoryName(String categoryName);
 }
 
 
