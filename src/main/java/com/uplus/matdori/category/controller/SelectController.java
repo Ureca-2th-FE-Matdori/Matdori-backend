@@ -54,8 +54,8 @@ public class SelectController {
     }
 
     @PostMapping("/finalize")
-    public ResponseEntity<String> confirmVisitAndUpdateCategory(@RequestBody VisitRequestDTO request) {
-        log.info("📌 요청이 SelectController에 도착했는지 확인: {}", request.getUser_id());
+    public ResponseEntity<ApiResponse<Object>> confirmVisitAndUpdateCategory(@RequestBody VisitRequestDTO request) {
+        log.info("요청이 SelectController에 도착했는지 확인: {}", request.getUser_id());
 
         //VisitRequestDTO를 HistoryDTO로 변환
         HistoryDTO historyDTO = new HistoryDTO();
@@ -69,8 +69,6 @@ public class SelectController {
         //DAO에 있는 저장 함수 넣고 DB에 저장
         selectService.confirmVisitAndUpdateCategory(historyDTO.getUser_id2(), historyDTO);
 
-        String response = "식당 방문 정보가 정상적으로 저장되었습니다.";
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }
