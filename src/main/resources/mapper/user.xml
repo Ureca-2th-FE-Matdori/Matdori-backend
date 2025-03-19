@@ -39,5 +39,10 @@
     <select id="getCategoryVisitCount" parameterType="map" resultType="int">
         SELECT ${columnName} FROM 회원정보 WHERE user_id = #{userId}
     </select>
+    
+    <!-- 전체 회원 중 많은 point를 갖고 있는 상위 10명의 데이터 조회 -->
+    <select id="getTopRankingUsers" resultType="com.uplus.matdori.category.model.dto.UserDTO">
+    	SELECT user_id, point FROM 회원정보 ORDER BY point DESC LIMIT 10
+    </select>
 
 </mapper>
