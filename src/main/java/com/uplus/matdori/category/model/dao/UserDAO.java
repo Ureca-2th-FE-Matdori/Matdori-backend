@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UserDAO {
 
     // 특정 회원 정보 조회
-    UserDTO getUserById(@Param("userId") String userId);
+    UserDTO getUserById(String userId);
 
     // 새로운 회원 정보 삽입
     void insertUser(UserDTO user);

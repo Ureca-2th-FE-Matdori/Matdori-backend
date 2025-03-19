@@ -16,7 +16,7 @@ public class UserDTO {
     private String user_id;  // 회원 ID (VARCHAR 10)
     private int point;  // 포인트 (INT)
     private String password;  // 비밀번호 (VARCHAR 16)
-    private List<Integer> categoryVisits = new ArrayList<>(Collections.nCopies(15, 0));
+    private List<Integer> categoryVisits = new ArrayList<>(Collections.nCopies(15, 0)); // 카테고리별 방문 횟수 (C_1 ~ C_15)
 
     // 카테고리별 방문 횟수 조회
     public List<Integer> getCategoryVisits() { 
@@ -42,5 +42,6 @@ public class UserDTO {
         }
         categoryVisits.set(categoryIndex - 1, count);
     }
+    
 }
 
