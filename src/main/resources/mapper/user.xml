@@ -4,8 +4,34 @@
 
 <mapper namespace="com.uplus.matdori.category.model.dao.UserDAO">
 
+    <!-- resultMap 설정을 통해 c_1~c_15 컬럼을 categoryVisits 리스트로 변환 가능 -->
+    <resultMap id="userResultMap" type="com.uplus.matdori.category.model.dto.UserDTO">
+        <id property="user_id" column="user_id"/>
+        <result property="password" column="password"/>
+        <result property="point" column="point"/>
+
+        <!-- c_1 ~ c_15를 리스트로 매핑 -->
+        <collection property="categoryVisits" ofType="java.lang.Integer">
+            <result column="c_1"/>
+            <result column="c_2"/>
+            <result column="c_3"/>
+            <result column="c_4"/>
+            <result column="c_5"/>
+            <result column="c_6"/>
+            <result column="c_7"/>
+            <result column="c_8"/>
+            <result column="c_9"/>
+            <result column="c_10"/>
+            <result column="c_11"/>
+            <result column="c_12"/>
+            <result column="c_13"/>
+            <result column="c_14"/>
+            <result column="c_15"/>
+        </collection>
+    </resultMap>
+
     <!-- 특정 회원 정보 조회 -->
-    <select id="getUserById" parameterType="string" resultType="com.uplus.matdori.category.model.dto.UserDTO">
+    <select id="getUserById" parameterType="string" resultMap="userResultMap">
         SELECT * FROM 회원정보 WHERE user_id = #{user_id}
     </select>
 
@@ -31,9 +57,34 @@
         WHERE user_id = #{userId}
     </update>
 
+    <!-- 특정 카테고리 방문 횟수 증가 / SQL 인젝션 위험을 방지하기 위해 아래와 같이 안전하게 구성해야 함 -->
+    <update id="incrementCategoryVisitCount">
+        UPDATE 회원정보
+        <set>
+            <choose>
+                <when test="categoryId == 1">c_1 = c_1 + 1</when>
+                <when test="categoryId == 2">c_2 = c_2 + 1</when>
+                <when test="categoryId == 3">c_3 = c_3 + 1</when>
+                <when test="categoryId == 4">c_4 = c_4 + 1</when>
+                <when test="categoryId == 5">c_5 = c_5 + 1</when>
+                <when test="categoryId == 6">c_6 = c_6 + 1</when>
+                <when test="categoryId == 7">c_7 = c_7 + 1</when>
+                <when test="categoryId == 8">c_8 = c_8 + 1</when>
+                <when test="categoryId == 9">c_9 = c_9 + 1</when>
+                <when test="categoryId == 10">c_10 = c_10 + 1</when>
+                <when test="categoryId == 11">c_11 = c_11 + 1</when>
+                <when test="categoryId == 12">c_12 = c_12 + 1</when>
+                <when test="categoryId == 13">c_13 = c_13 + 1</when>
+                <when test="categoryId == 14">c_14 = c_14 + 1</when>
+                <when test="categoryId == 15">c_15 = c_15 + 1</when>
+            </choose>
+        </set>
+        WHERE user_id = #{user_id}
+    </update>
+
     <!-- 특정 카테고리 방문 횟수 조회 (동적 SQL) -->
     <select id="getCategoryVisitCount" parameterType="map" resultType="int">
-        SELECT ${columnName} FROM 회원정보 WHERE user_id = #{user_id}
+        SELECT c_${categoryId} FROM 회원정보 WHERE user_id = #{user_id}
     </select>
 
 </mapper>

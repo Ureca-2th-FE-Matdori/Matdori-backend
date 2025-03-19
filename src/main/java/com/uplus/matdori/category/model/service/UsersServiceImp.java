@@ -1,5 +1,8 @@
 package com.uplus.matdori.category.model.service;
 
+import com.uplus.matdori.category.model.dao.HistoryDAO;
+import com.uplus.matdori.category.model.dto.HistoryDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -8,16 +11,17 @@ import com.uplus.matdori.category.model.dao.UserDAO;
 import com.uplus.matdori.category.model.dto.ApiResponse;
 import com.uplus.matdori.category.model.dto.UserDTO;
 import com.uplus.matdori.category.model.dto.UserResponseDto;
+import org.springframework.transaction.annotation.Transactional;
 
 //회원 정보 관련 기능들을 구현한 UsersServiceImp
 @Service
 public class UsersServiceImp implements UsersService {
     private final UserDAO userDAO;
-    
-	
+
+	@Autowired
     public UsersServiceImp(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
+		this.userDAO = userDAO;
+	}
 
     public boolean login(String userId, String password) {
         UserDTO user = userDAO.getUserById(userId);
@@ -57,10 +61,5 @@ public class UsersServiceImp implements UsersService {
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ApiResponse.error("이미 존재하는 아이디입니다!"));
     	}
-
-        
     }
-  
-    
-
 }

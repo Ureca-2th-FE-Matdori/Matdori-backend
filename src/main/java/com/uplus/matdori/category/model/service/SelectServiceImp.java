@@ -2,17 +2,22 @@ package com.uplus.matdori.category.model.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uplus.matdori.category.model.dao.CategoryDAO;
+import com.uplus.matdori.category.model.dao.HistoryDAO;
 import com.uplus.matdori.category.model.dao.UserDAO;
 import com.uplus.matdori.category.model.dto.CategoryDTO;
+import com.uplus.matdori.category.model.dto.HistoryDTO;
 import com.uplus.matdori.category.model.dto.NaverLocalResponseDTO;
 import com.uplus.matdori.category.model.dto.UserDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -20,6 +25,7 @@ import java.util.Random;
 
 
 //뽑기 관련 Service 구현
+@Slf4j
 @Service
 public class SelectServiceImp implements SelectService {
 
@@ -28,6 +34,7 @@ public class SelectServiceImp implements SelectService {
 
     private final CategoryDAO categoryDAO;
     private final UserDAO userDAO;
+    private final HistoryDAO historyDAO;
     private final Random random = new Random();
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -39,9 +46,11 @@ public class SelectServiceImp implements SelectService {
     private static final String NAVER_LOCAL_SEARCH_API = "https://openapi.naver.com/v1/search/local.json";
 
     //초기에 DAO와 userDAO 초기화하는 생성자
-    public SelectServiceImp(CategoryDAO categoryDAO, UserDAO userDAO) {
+    @Autowired
+    public SelectServiceImp(CategoryDAO categoryDAO, UserDAO userDAO, HistoryDAO historyDAO) {
         this.categoryDAO = categoryDAO;
         this.userDAO = userDAO;
+        this.historyDAO = historyDAO;
     }
 
     //"랜덤한" 카테고리 ID 선택 후, 이를 이용해서 검색 정보 불러서 Client에 넘겨주는 메소드
@@ -105,5 +114,25 @@ public class SelectServiceImp implements SelectService {
         }
 
         return response.getBody(); //JSON을 그대로 반환
+    }
+
+    //회원의 특정 카테고리 방문 횟수 증가시키고, 방문한 식당 정보를 히스토리에 기록하는 confirmVisitAndUpdateCategory()
+    public void confirmVisitAndUpdateCategory(String userId, HistoryDTO history) {
+        //1. 현재 회원 정보를 가져오기
+        UserDTO user = userDAO.getUserById(userId);
+        if(user == null) {
+            throw new RuntimeException("유저를 찾을 수 없어요: " + userId);
+        }
+
+        //2. 특정 카테고리 방문 횟수 증가 (DTO 내부에서)
+        int categoryId = history.getCategory_id2();
+        user.incrementCategoryVisitCount(categoryId);
+
+        //3. 변경된 정보를 DB에 반영
+        userDAO.incrementCategoryVisitCount(userId, categoryId);
+
+        //4. 방문한 식당 정보를 "방문한_식당_히스토리" 테이블에 삽입
+        history.setUser_id2(userId); //JSON의 "user_id" 값을 VisitHistoryDTO의 "user_id2"로 매핑
+        historyDAO.insertVisitHistory(history);
     }
 }

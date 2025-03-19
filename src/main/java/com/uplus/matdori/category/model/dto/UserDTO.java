@@ -18,27 +18,20 @@ public class UserDTO {
     private String password;  // 비밀번호 (VARCHAR 16)
     private List<Integer> categoryVisits = new ArrayList<>(Collections.nCopies(15, 0)); // 카테고리별 방문 횟수 (C_1 ~ C_15)
 
-    //카테고리별 방문 횟수 조회
-    public List<Integer> getCategoryVisits() { return categoryVisits; }
-    public void setCategoryVisits(List<Integer> categoryVisits) {
-        this.categoryVisits = categoryVisits != null ? categoryVisits : new ArrayList<>(Collections.nCopies(15, 0));
-    }
-
     // 특정 카테고리 방문 횟수 조회 (매개변수로 카테고리 id를 넣으면 됨)
     public int getCategoryVisitCount(int categoryIndex) {
         if (categoryIndex < 1 || categoryIndex > 15) {
-            throw new IndexOutOfBoundsException("Category index must be between 1 and 15.");
+            throw new IndexOutOfBoundsException("범위 초과했잖아 이자식아");
         }
         return categoryVisits.get(categoryIndex - 1); //categoryId는 1~15의 값을, 리스트는 0~14의 값을 사용한다
     }
 
-    // 특정 카테고리 방문 횟수 변경
-    public void setCategoryVisitCount(int categoryIndex, int count) {
+    // 특정 카테고리 방문 횟수 증가
+    public void incrementCategoryVisitCount(int categoryIndex) {
         if (categoryIndex < 1 || categoryIndex > 15) {
-            throw new IndexOutOfBoundsException("Category index must be between 1 and 15.");
+            throw new IndexOutOfBoundsException("범위 초과했잖아 이자식아");
         }
-        categoryVisits.set(categoryIndex - 1, count);
+        categoryVisits.set(categoryIndex - 1, categoryVisits.get(categoryIndex - 1) + 1);
     }
-    
-}
 
+}

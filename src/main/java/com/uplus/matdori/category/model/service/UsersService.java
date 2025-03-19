@@ -1,5 +1,6 @@
 package com.uplus.matdori.category.model.service;
 
+import com.uplus.matdori.category.model.dto.HistoryDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,7 @@ import com.uplus.matdori.category.model.dto.UserResponseDto;
 @Service
 public interface UsersService {
     boolean login(String userId, String password);
-    
     public ResponseEntity<ApiResponse<UserResponseDto>> createAccount(UserDTO userDTO);
-     
     boolean checkUserId(String userId);
     
 }

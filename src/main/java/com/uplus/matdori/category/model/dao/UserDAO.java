@@ -18,6 +18,7 @@ public interface UserDAO {
 
     // 특정 카테고리 방문 횟수 조회
     int getCategoryVisitCount(@Param("user_id") String userId, @Param("columnName") String columnName);
-    
-    //
+
+    //특정 카테고리 방문 횟수 증가
+    void incrementCategoryVisitCount(@Param("user_id") String userId, @Param("categoryId") int categoryId);
 }
