@@ -9,7 +9,7 @@ import java.util.List;
 public interface HistoryDAO {
 
     // 특정 사용자의 방문 히스토리 조회
-    List<HistoryDTO> getHistoryByUserId(@Param("userId") String userId);
+    List<HistoryDTO> getHistoryByUserId(@Param("user_id") String userId);
 
     // 새로운 방문 히스토리 추가
     void insertHistory(HistoryDTO history);
