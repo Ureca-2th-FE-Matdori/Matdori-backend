@@ -13,13 +13,16 @@ import java.util.Collections;
 @NoArgsConstructor
 @ToString
 public class UserDTO {
-    private String userId;  // 회원 ID (VARCHAR 10)
+    private String user_id;  // 회원 ID (VARCHAR 10)
     private int point;  // 포인트 (INT)
     private String password;  // 비밀번호 (VARCHAR 16)
-    private List<Integer> categoryVisits;  // 카테고리별 방문 횟수 (C_1 ~ C_15)
+    private List<Integer> categoryVisits = new ArrayList<>(Collections.nCopies(15, 0));
 
-    //카테고리별 방문 횟수 조회
-    public List<Integer> getCategoryVisits() { return categoryVisits; }
+    // 카테고리별 방문 횟수 조회
+    public List<Integer> getCategoryVisits() { 
+        return categoryVisits;
+    }
+    
     public void setCategoryVisits(List<Integer> categoryVisits) {
         this.categoryVisits = categoryVisits != null ? categoryVisits : new ArrayList<>(Collections.nCopies(15, 0));
     }
