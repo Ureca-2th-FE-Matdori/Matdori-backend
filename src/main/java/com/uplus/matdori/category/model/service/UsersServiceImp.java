@@ -18,30 +18,30 @@ public class UsersServiceImp implements UsersService {
     public UsersServiceImp(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
- 
-    
+   
     //로그인
     public ResponseEntity<ApiResponse<UserResponseDto>> login(String userId, String password) {
     	
-    	//아이디 존재 여부 확인
-        UserDTO user = userDAO.getUserById(userId);
+    	try {
+    		//아이디 존재 여부 확인
+    		UserDTO user = userDAO.getUserById(userId);
         
-        //아이디가 존재 하지 않는 다면 존재하지 않는 계정 반환
-        if(user == null) {
-        	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("존재하지 않는 계정입니다. 회원가입을 진행해 주세요"));
-        }
+    		//아이디가 존재 하지 않고 비밀번호가 일치 하지 않는다면 에러 메세지
+    		if(user == null || !user.getPassword().equals(password)) {
+    			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    					.body(ApiResponse.error("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요."));
         
-        //아이디가 존재 하고 비밀번호가 일치 한다면 로그인 성공
-        if(user.getPassword().equals(password)) {
-        	UserResponseDto responseDto = new UserResponseDto(user.getUser_id());
-			return ResponseEntity.ok(ApiResponse.success(responseDto));
-			
-        }else {
-        	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("비밀번호가 일치하지 않습니다."));
-        }
+    		}else {	
+    			// 아이디 비밀번호가 일치하면 로그인 성공
+    			UserResponseDto responseDto = new UserResponseDto(user.getUser_id());
+    			return ResponseEntity.ok(ApiResponse.success(responseDto));
+        		}
+    		// 글로벌 예외 처리로 500 에러 반환
+    	}catch(Exception e) {
+	         throw new RuntimeException(e);
+	    } 
     }
+ 
    
     // 회원 가입 진행 시 아이디 중복 확인 (같은 아이디가 있다면 회원가입 false)
     public boolean checkUserId(String userId) {
