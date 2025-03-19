@@ -5,9 +5,12 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uplus.matdori.category.model.dto.ApiResponse;
+import com.uplus.matdori.category.model.dto.MyRankingDTO;
 import com.uplus.matdori.category.model.dto.UserRankingDTO;
 import com.uplus.matdori.category.model.service.RankingService;
 
@@ -39,8 +42,8 @@ public class RankingController {
     }
 
     @GetMapping("/top10")
-    public ResponseEntity<List<UserRankingDTO>> getTopRankingUsers() {
+    public ResponseEntity<ApiResponse<List<UserRankingDTO>>> getTopRankingUsers() {
         List<UserRankingDTO> topUsers = rankingService.getTopRankingUsers();
-        return ResponseEntity.ok(topUsers);
+        return ResponseEntity.ok(ApiResponse.success(topUsers));
     }
 }
