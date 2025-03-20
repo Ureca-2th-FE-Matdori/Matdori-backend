@@ -50,8 +50,11 @@ public class SelectController {
     }
 
     @GetMapping("/random")
-    public NaverLocalResponseDTO getRandomCategory() {
-        return selectService.getRandomCategory(); //JSON 형식으로 자동 변환되어 반환
+    public NaverLocalResponseDTO getRandomCategory(
+            @RequestParam double latitude,
+            @RequestParam double longitude
+    ) {
+        return selectService.getRandomCategory(latitude, longitude); //JSON 형식으로 자동 변환되어 반환
     }
 
     @PostMapping("/finalize")

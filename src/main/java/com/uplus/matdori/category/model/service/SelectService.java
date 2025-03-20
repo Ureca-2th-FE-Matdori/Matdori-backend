@@ -7,8 +7,8 @@ import com.uplus.matdori.category.model.dto.NaverLocalResponseDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface SelectService {
-    NaverLocalResponseDTO getRandomCategory();
+    NaverLocalResponseDTO getRandomCategory(double latitude, double longitude);
     ResponseEntity<ApiResponse<Object>> confirmVisitAndUpdateCategory(String userId, HistoryDTO history);
     String getPreferredCategory(String userId);
-    NaverLocalResponseDTO testSearchWithLocation(String categoryName);
+    NaverLocalResponseDTO testSearchWithLocation(String categoryName, double latitude, double longitude);
 }

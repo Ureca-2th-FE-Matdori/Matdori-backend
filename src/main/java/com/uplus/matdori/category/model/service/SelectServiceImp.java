@@ -1,5 +1,6 @@
 package com.uplus.matdori.category.model.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uplus.matdori.category.model.dao.CategoryDAO;
 import com.uplus.matdori.category.model.dao.HistoryDAO;
@@ -40,6 +41,11 @@ public class SelectServiceImp implements SelectService {
     private static final String NAVER_CLIENT_SECRET = "SAmVlYp2QJ"; // 네이버 Client Secret 입력
     private static final String NAVER_LOCAL_SEARCH_API = "https://openapi.naver.com/v1/search/local.json";
 
+    //네이버 Geocoding 등... 다른 api 관련 정보
+    private static final String CLIENT_ID_2 = "02ykeyehkx"; // 발급받은 Client ID
+    private static final String CLIENT_SECRET_2 = "mO5YsavNQw8Ni7uEHTnkS6bJ6PdwphZ8SxWeEsOP"; // 발급받은 Client Secret
+    private static final String REVERSE_GEOCODING_URL_2 = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc";
+
     //초기에 DAO와 userDAO 초기화하는 생성자
     @Autowired
     public SelectServiceImp(CategoryDAO categoryDAO, UserDAO userDAO, HistoryDAO historyDAO) {
@@ -51,7 +57,7 @@ public class SelectServiceImp implements SelectService {
     //"랜덤한" 카테고리 ID 선택 후, 이를 이용해서 검색 정보 불러서 Client에 넘겨주는 메소드
     //네이버 지역 검색 API를 활용
     @Override
-    public NaverLocalResponseDTO getRandomCategory() {
+    public NaverLocalResponseDTO getRandomCategory(double latitude, double longitude) {
         int randomId = random.nextInt(15) + 1; // 1~15 랜덤 숫자 생성
         String categoryName = categoryDAO.search(randomId); //랜덤 ID에 해당하는 카테고리명 조회
 
@@ -61,7 +67,7 @@ public class SelectServiceImp implements SelectService {
         }
 
         //testSearchWithLocation() 메소드를 이용해서 위치+키워드 기반으로 상위 5개 음식점 정보를 돌려준다
-        return testSearchWithLocation(categoryName);
+        return testSearchWithLocation(categoryName, latitude, longitude);
     }
 
     @Override
@@ -79,14 +85,61 @@ public class SelectServiceImp implements SelectService {
         return categoryDAO.search(bestCategory);
     }
 
+    public String getRegionName(double latitude, double longitude) {
+
+        String coords = longitude+","+latitude;
+        String url = REVERSE_GEOCODING_URL_2 + "?coords=" + coords + "&output=json&orders=roadaddr";
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-NCP-APIGW-API-KEY-ID", CLIENT_ID_2);
+        headers.set("X-NCP-APIGW-API-KEY", CLIENT_SECRET_2);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode root = objectMapper.readTree(response.getBody());
+                JsonNode results = root.path("results");
+
+                if (results.isArray() && results.size() > 0) {
+                    JsonNode firstResult = results.get(0);
+                    JsonNode region = firstResult.path("region");
+                    JsonNode land = firstResult.path("land");
+
+                    String area1 = region.path("area1").path("name").asText();
+                    String area2 = region.path("area2").path("name").asText();
+                    String area3 = region.path("area3").path("name").asText();
+                    String roadName = land.path("name").asText();
+
+                    return area1 + " " + area2 + " " + area3 + " " + roadName + " ";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     //위치 정보와 함께 키워드를 생성했다고 가정하고, 위치 기반으로 네이버 지역 검색 API를 호출하는 메소드 testSearchWithLocation()
-    public NaverLocalResponseDTO testSearchWithLocation(String categoryName) {
-        //1. 테스트용 임의의 위치 (멀캠 선릉 좌표)
-        double latitude = 37.504;
-        double longitude = 127.0493;
+    public NaverLocalResponseDTO testSearchWithLocation(String categoryName, double latitude, double longitude) {
+
+        log.info("latitude: {}, longitude: {}", latitude, longitude);
+
+        //1. 위도, 경도 값을 받아와서, 지역명 정보를 받아온다
+        String result = getRegionName(latitude, longitude);
+
+        log.info("result: {}", result);
+
+        //result 값이 null이면(네이버 지도 api에서 "지역명" 정보를 못 불러왔을 경우)
+        if(result == null) {
+            throw new RuntimeException();
+        }
 
         //2. 위치를 기반으로 키워드 생성 (ex. "선릉역 ${패스트푸드})
-        String keyword = "선릉역 " + categoryName;
+        String keyword = result + " " + categoryName;
 
         //3. 네이버 지역 검색 API 호출
         return searchPlaces(keyword);
