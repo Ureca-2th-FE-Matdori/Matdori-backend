@@ -10,29 +10,16 @@
         <result property="password" column="password"/>
         <result property="point" column="point"/>
 
-        <!-- c_1 ~ c_15를 리스트로 매핑 -->
-        <collection property="categoryVisits" ofType="java.lang.Integer">
-            <result column="c_1"/>
-            <result column="c_2"/>
-            <result column="c_3"/>
-            <result column="c_4"/>
-            <result column="c_5"/>
-            <result column="c_6"/>
-            <result column="c_7"/>
-            <result column="c_8"/>
-            <result column="c_9"/>
-            <result column="c_10"/>
-            <result column="c_11"/>
-            <result column="c_12"/>
-            <result column="c_13"/>
-            <result column="c_14"/>
-            <result column="c_15"/>
-        </collection>
+        <!-- c_1 ~ c_15 컬럼을 각각 매핑 후, TypeHandler를 통해 리스트로 변환 -->
+        <result property="categoryVisits" column="c_1" typeHandler="com.uplus.matdori.category.model.typehandler.CategoryVisitsTypeHandler"/>
+
     </resultMap>
 
     <!-- 특정 회원 정보 조회 -->
     <select id="getUserById" parameterType="string" resultMap="userResultMap">
-        SELECT * FROM 회원정보 WHERE user_id = #{user_id}
+        SELECT user_id, password, point, c_1, c_2, c_3, c_4, c_5, c_6, c_7, c_8, c_9, c_10, c_11, c_12, c_13, c_14, c_15
+        FROM 회원정보
+        WHERE user_id = #{user_id}
     </select>
 
     <!-- 회원 등록 -->
@@ -54,7 +41,7 @@
                 c_${index + 1} = #{visit},
             </foreach>
         </trim>
-        WHERE user_id = #{userId}
+        WHERE user_id = #{user_id}
     </update>
 
     <!-- 특정 카테고리 방문 횟수 증가 / SQL 인젝션 위험을 방지하기 위해 아래와 같이 안전하게 구성해야 함 -->

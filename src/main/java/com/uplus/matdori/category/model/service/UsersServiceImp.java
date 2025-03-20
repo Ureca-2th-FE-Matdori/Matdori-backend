@@ -2,6 +2,8 @@ package com.uplus.matdori.category.model.service;
 
 import com.uplus.matdori.category.model.dao.HistoryDAO;
 import com.uplus.matdori.category.model.dto.HistoryDTO;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,11 @@ import com.uplus.matdori.category.model.dto.UserResponseDto;
 import org.springframework.transaction.annotation.Transactional;
 
 //회원 정보 관련 기능들을 구현한 UsersServiceImp
+@Slf4j
 @Service
 public class UsersServiceImp implements UsersService {
     private final UserDAO userDAO;
+	LoggerFactory loggerFactory;
 
 	@Autowired
     public UsersServiceImp(UserDAO userDAO) {
