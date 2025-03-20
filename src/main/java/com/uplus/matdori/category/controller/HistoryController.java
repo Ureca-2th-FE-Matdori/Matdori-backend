@@ -1,5 +1,6 @@
 package com.uplus.matdori.category.controller;
 
+import com.uplus.matdori.category.model.dto.ApiResponse;
 import com.uplus.matdori.category.model.dto.HistoryDTO;
 import com.uplus.matdori.category.model.service.HistoryService;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +34,9 @@ public class HistoryController {
         this.historyService = historyService;
     }
 
-    @GetMapping("/getTable/{userId}")
-    public List<HistoryDTO> getUserHistory(@PathVariable String userId) {
-        return historyService.getUserHistory(userId);
+    @GetMapping("/{user_id}") 
+    public ResponseEntity<ApiResponse<List<HistoryDTO>>> getUserHistory(@PathVariable("user_id") String user_id) {
+        return historyService.getUserHistory(user_id);
     }
 
     @PostMapping("/rate")
