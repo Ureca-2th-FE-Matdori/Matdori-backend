@@ -4,23 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uplus.matdori.category.model.dao.CategoryDAO;
 import com.uplus.matdori.category.model.dao.HistoryDAO;
 import com.uplus.matdori.category.model.dao.UserDAO;
-import com.uplus.matdori.category.model.dto.CategoryDTO;
-import com.uplus.matdori.category.model.dto.HistoryDTO;
-import com.uplus.matdori.category.model.dto.NaverLocalResponseDTO;
-import com.uplus.matdori.category.model.dto.UserDTO;
+import com.uplus.matdori.category.model.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -130,11 +125,12 @@ public class SelectServiceImp implements SelectService {
     }
 
     //회원의 특정 카테고리 방문 횟수 증가시키고, 방문한 식당 정보를 히스토리에 기록하는 confirmVisitAndUpdateCategory()
-    public void confirmVisitAndUpdateCategory(String userId, HistoryDTO history) {
+    public ResponseEntity<ApiResponse<Object>> confirmVisitAndUpdateCategory(String userId, HistoryDTO history) {
         //1. 현재 회원 정보를 가져오기
         UserDTO user = userDAO.getUserById(userId);
         if(user == null) {
-            throw new RuntimeException("유저를 찾을 수 없어요: " + userId);
+            //실패하면.. BAD_REQUEST 선언
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("유저를 찾을 수 없어요"));
         }
 
         //2. 특정 카테고리 방문 횟수 증가 (DTO 내부에서)
@@ -147,5 +143,8 @@ public class SelectServiceImp implements SelectService {
         //4. 방문한 식당 정보를 "방문한_식당_히스토리" 테이블에 삽입
         history.setUser_id2(userId); //JSON의 "user_id" 값을 VisitHistoryDTO의 "user_id2"로 매핑
         historyDAO.insertVisitHistory(history);
+
+        //success일 경우에는 Map.of() 넘겨서.. content는 빈 객체를 넘김
+        return ResponseEntity.ok(ApiResponse.success(Map.of()));
     }
 }

@@ -68,9 +68,6 @@ public class SelectController {
         historyDTO.setCategory_id2(request.getRestaurant_info().getCategory_id()); //카테고리 id 레츠고
 
         //DAO에 있는 저장 함수 넣고 DB에 저장
-        selectService.confirmVisitAndUpdateCategory(historyDTO.getUser_id2(), historyDTO);
-
-        //null 넘기면, error인지 아닌지 구별하기 힘듦........
-        return ResponseEntity.ok(ApiResponse.success(Map.of()));
+        return selectService.confirmVisitAndUpdateCategory(historyDTO.getUser_id2(), historyDTO);
     }
 }
