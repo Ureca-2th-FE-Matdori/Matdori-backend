@@ -46,4 +46,9 @@ public class RankingController {
         List<UserRankingDTO> topUsers = rankingService.getTopRankingUsers();
         return ResponseEntity.ok(ApiResponse.success(topUsers));
     }
+    
+    @GetMapping("/myRanking/{user_id}")
+    public ResponseEntity<ApiResponse<MyRankingDTO>> getMyRanking(@PathVariable String user_id) {
+    	return rankingService.getMyRanking(user_id);
+    }
 }
