@@ -15,8 +15,7 @@ public class ApiResponse<T> {
 
     //성공했을 때
     public static <T> ApiResponse<T> success(T content) {
-        T defaultValue = (T) new HashMap<String, Object>(); // 빈 객체 표현
-        return new ApiResponse<>(Optional.ofNullable(content).orElse(defaultValue), null);
+        return new ApiResponse<>(content, null);
     }
 
     //실패했을 때

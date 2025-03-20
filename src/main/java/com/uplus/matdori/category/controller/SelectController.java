@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /*
@@ -69,6 +70,7 @@ public class SelectController {
         //DAO에 있는 저장 함수 넣고 DB에 저장
         selectService.confirmVisitAndUpdateCategory(historyDTO.getUser_id2(), historyDTO);
 
-        return ResponseEntity.ok(ApiResponse.success(null));
+        //null 넘기면, error인지 아닌지 구별하기 힘듦........
+        return ResponseEntity.ok(ApiResponse.success(Map.of()));
     }
 }
