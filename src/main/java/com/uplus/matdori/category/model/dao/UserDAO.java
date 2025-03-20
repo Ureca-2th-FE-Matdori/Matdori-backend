@@ -1,5 +1,7 @@
 package com.uplus.matdori.category.model.dao;
 
+import java.util.List;
+
 import com.uplus.matdori.category.model.dto.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -17,7 +19,8 @@ public interface UserDAO {
     void updateUser(UserDTO user);
 
     // 특정 카테고리 방문 횟수 조회
-    int getCategoryVisitCount(@Param("user_id") String userId, @Param("columnName") String columnName);
+    int getCategoryVisitCount(@Param("userId") String userId, @Param("columnName") String columnName);
     
-    //
+    // point 상위 10명의 회원 정보 조회
+	List<UserDTO> getTopRankingUsers();
 }

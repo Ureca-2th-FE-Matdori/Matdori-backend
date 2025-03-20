@@ -18,8 +18,11 @@ public class UserDTO {
     private String password;  // 비밀번호 (VARCHAR 16)
     private List<Integer> categoryVisits = new ArrayList<>(Collections.nCopies(15, 0)); // 카테고리별 방문 횟수 (C_1 ~ C_15)
 
-    //카테고리별 방문 횟수 조회
-    public List<Integer> getCategoryVisits() { return categoryVisits; }
+    // 카테고리별 방문 횟수 조회
+    public List<Integer> getCategoryVisits() { 
+        return categoryVisits;
+    }
+    
     public void setCategoryVisits(List<Integer> categoryVisits) {
         this.categoryVisits = categoryVisits != null ? categoryVisits : new ArrayList<>(Collections.nCopies(15, 0));
     }
