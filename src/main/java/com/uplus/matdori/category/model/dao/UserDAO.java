@@ -21,11 +21,15 @@ public interface UserDAO {
     void updateUser(UserDTO user);
 
     // 특정 카테고리 방문 횟수 조회
-    int getCategoryVisitCount(@Param("userId") String userId, @Param("columnName") String columnName);
+
+    int getCategoryVisitCount(@Param("user_id") String userId, @Param("columnName") String columnName);
     
     // point 상위 10명의 회원 정보 조회
 	List<UserDTO> getTopRankingUsers();
 
 	// 나의 랭킹 조회
 	MyRankingDTO getMyRanking(@Param("user_id") String user_id);
+
+    //특정 카테고리 방문 횟수 증가
+    void incrementCategoryVisitCount(@Param("user_id") String userId, @Param("categoryId") int categoryId);
 }

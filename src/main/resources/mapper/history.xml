@@ -9,10 +9,10 @@
         SELECT * FROM 방문한_식당_히스토리 WHERE user_id2 = #{userId}
     </select>
 
-    <!-- 새 히스토리 데이터 삽입 -->
-    <insert id="insertHistory" parameterType="com.uplus.matdori.category.model.dto.HistoryDTO">
-        INSERT INTO 방문한_식당_히스토리 (user_id2, url, rate, history_id, category_id2)
-        VALUES (#{userId}, #{url}, #{rate}, #{historyId}, #{categoryId})
+    <!-- 방문한 식당 기록 추가 -->
+    <insert id="insertVisitHistory" parameterType="com.uplus.matdori.category.model.dto.HistoryDTO">
+        INSERT INTO 방문한_식당_히스토리 (user_id2, rate, url, title, roadAddress, category_id2)
+        VALUES (#{user_id2}, 0, #{url}, #{title}, #{roadAddress}, #{category_id2})
     </insert>
 
     <!-- 평점 업데이트 -->
