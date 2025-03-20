@@ -109,7 +109,7 @@ public class SelectServiceImp implements SelectService {
     public String getRegionName(double latitude, double longitude) {
 
         String coords = longitude+","+latitude;
-        String url = REVERSE_GEOCODING_URL_2 + "?coords=" + coords + "&output=json&orders=roadaddr";
+        String url = REVERSE_GEOCODING_URL_2 + "?coords=" + coords + "&output=json&orders=admcode";
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -133,9 +133,8 @@ public class SelectServiceImp implements SelectService {
                     String area1 = region.path("area1").path("name").asText();
                     String area2 = region.path("area2").path("name").asText();
                     String area3 = region.path("area3").path("name").asText();
-                    String roadName = land.path("name").asText();
 
-                    return area1 + " " + area2 + " " + area3 + " " + roadName + " ";
+                    return area1 + " " + area2 + " " + area3 + " "; // "서울특별시 관악구 중앙동" 형식
                 }
             } catch (Exception e) {
                 e.printStackTrace();
