@@ -68,7 +68,7 @@ public class UsersServiceImp implements UsersService {
                     .body(ApiResponse.error("아이디는 5자 이상 10자 이하로 입력해주세요."));	
     	}
     	//3. 비밀번호 길이 5 ~ 16자로 제한 ->가입 실패 : 비밀번호 길이제한 (상태 코드 및 에러 메세지 전달)
-    	if(userDTO.getPassword().length() < 5 || userDTO.getPassword().length()>10) {
+    	if(userDTO.getPassword().length() < 5 || userDTO.getPassword().length()>16) {
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ApiResponse.error("비밀번호는 5자 이상 16자 이하로 입력해주세요."));	
     	}
