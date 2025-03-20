@@ -1,5 +1,7 @@
 package com.uplus.matdori.category.model.dao;
 
+import java.util.List;
+
 import com.uplus.matdori.category.model.dto.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
