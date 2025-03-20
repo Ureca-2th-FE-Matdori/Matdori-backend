@@ -59,7 +59,7 @@ public class SelectServiceImp implements SelectService {
     //"랜덤한" 카테고리 ID 선택 후, 이를 이용해서 검색 정보 불러서 Client에 넘겨주는 메소드
     //네이버 지역 검색 API를 활용
     @Override
-    public NaverLocalResponseDTO getRandomCategory(double latitude, double longitude, String selectCategoryName) {
+    public ResponseEntity<ApiResponse<NaverLocalResponseDTO>> getRandomCategory(double latitude, double longitude, String selectCategoryName) {
         try {
             if (selectCategoryName == null) {
                 int randomId = random.nextInt(15) + 1; // 1~15 랜덤 숫자 생성
@@ -71,7 +71,7 @@ public class SelectServiceImp implements SelectService {
                             .body(ApiResponse.error("카테고리를 찾을 수 없습니다."));
                 }
                 //testSearchWithLocation() 메소드를 이용해서 위치+키워드 기반으로 상위 5개 음식점 정보를 돌려준다
-                return testSearchWithLocation(categoryName, latitude, longitude);
+                return ResponseEntity.ok(ApiResponse.success(testSearchWithLocation(categoryName, latitude, longitude)));
             } else {
                 // 카테고리 존재 여부 확인
                 Integer categoryId = categoryDAO.checkCategoryName(selectCategoryName);
@@ -83,7 +83,7 @@ public class SelectServiceImp implements SelectService {
                 }
 
                 // 검색 결과 반환
-                return testSearchWithLocation(selectCategoryName, latitude, longitude);
+                return ResponseEntity.ok(ApiResponse.success(testSearchWithLocation(selectCategoryName, latitude, longitude)));
             }
         } catch (Exception e) {
 	         throw new RuntimeException(e);
