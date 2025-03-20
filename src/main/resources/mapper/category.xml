@@ -37,6 +37,12 @@
        WHERE category_id = #{category_id}
     </select>
     
+    <select id="checkCategoryName" parameterType="java.lang.String" resultType="java.lang.Integer">
+       SELECT category_id
+       FROM 카테고리
+       WHERE category_name = #{category_name}
+    </select>
+    
     <select id="insert" parameterType="com.uplus.matdori.category.model.dto.CategoryDTO">
     	insert into 카테고리 (category_id, category_name) values (#{category_id}, #{category_name})
     </select>

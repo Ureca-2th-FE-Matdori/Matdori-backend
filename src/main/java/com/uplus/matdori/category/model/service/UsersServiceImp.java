@@ -26,7 +26,7 @@ public class UsersServiceImp implements UsersService {
     //로그인
     public ResponseEntity<ApiResponse<UserResponseDto>> login(String userId, String password) {
     	
-    	try {
+    	try {  		
     		//아이디 존재 여부 확인
     		UserDTO user = userDAO.getUserById(userId);
         
@@ -53,31 +53,39 @@ public class UsersServiceImp implements UsersService {
     	
     	if (user == null) {
     		return true;
+    		
     	} else {
     		return false;
     	}
     }
     
-    
     // 회원가입
     public ResponseEntity<ApiResponse<UserResponseDto>> createAccount(UserDTO userDTO) {
-    		// id가 null 값이 맞다면 가입 처리 진행
-    	if(checkUserId(userDTO.getUser_id())) {
-    		// 정보 삽입
-    		try {
-    			userDAO.insertUser(userDTO);
-    			
-    			UserResponseDto responseDto = new UserResponseDto(userDTO.getUser_id());
-    			return ResponseEntity.ok(ApiResponse.success(responseDto));
-    			
-    		} catch (Exception e) {
-    	         throw new RuntimeException(e);  // 글로벌 예외 처리로 500 에러 반환
-        }
-    		
-    	} else {
-    		// 가입 실패 : 아이디 중복 (상태 코드 및 에러 메세지 전달)
+    	//1. 아이디 중복 검사 진행 -> 가입 실패 : 아이디 중복 (상태 코드 및 에러 메세지 전달)
+    	if(!checkUserId(userDTO.getUser_id())) {
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("이미 존재하는 아이디입니다!"));
+                  .body(ApiResponse.error("이미 존재하는 아이디입니다!"));	
     	}
+    	//2. 아이디 길이 5 ~ 10자로 제한 ->가입 실패 : 아이디 길이제한 (상태 코드 및 에러 메세지 전달)
+    	if(userDTO.getUser_id().length() < 5 || userDTO.getUser_id().length()>10) {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("아이디는 5자 이상 10자 이하로 입력해주세요."));	
+    	}
+    	//3. 비밀번호 길이 5 ~ 16자로 제한 ->가입 실패 : 비밀번호 길이제한 (상태 코드 및 에러 메세지 전달)
+    	if(userDTO.getPassword().length() < 5 || userDTO.getPassword().length()>16) {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("비밀번호는 5자 이상 16자 이하로 입력해주세요."));	
+    	}
+    	//4. 3가지 정보 통과하는 경우 회원 정보 삽입
+    	try {
+    		// 회원 정보 삽입
+    		userDAO.insertUser(userDTO);
+    		
+    		UserResponseDto responseDto = new UserResponseDto(userDTO.getUser_id());
+			return ResponseEntity.ok(ApiResponse.success(responseDto));	
+			//삽입이 안됐을 때 글로벌 예외 처리로 500 에러 반환
+    	}catch(Exception e) {
+	         throw new RuntimeException(e);
+	    }
     }
 }

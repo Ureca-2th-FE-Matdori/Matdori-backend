@@ -4,7 +4,6 @@ import com.uplus.matdori.category.model.dao.CategoryDAO;
 import com.uplus.matdori.category.model.dao.HistoryDAO;
 import com.uplus.matdori.category.model.dao.UserDAO;
 import com.uplus.matdori.category.model.dto.*;
-
 import com.uplus.matdori.category.model.service.HistoryService;
 import com.uplus.matdori.category.model.service.SelectService;
 import com.uplus.matdori.category.model.service.SelectServiceImp;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 /*
@@ -48,15 +48,7 @@ public class SelectController {
         this.historyService = historyService;
         this.historyDAO = historyDAO;
     }
-
-    @GetMapping("/random")
-    public NaverLocalResponseDTO getRandomCategory(
-            @RequestParam double latitude,
-            @RequestParam double longitude
-    ) {
-        return selectService.getRandomCategory(latitude, longitude); //JSON 형식으로 자동 변환되어 반환
-    }
-
+  
     @PostMapping("/finalize")
     public ResponseEntity<ApiResponse<Object>> confirmVisitAndUpdateCategory(@RequestBody VisitRequestDTO request) {
         log.info("요청이 SelectController에 도착했는지 확인: {}", request.getUser_id());
@@ -72,5 +64,10 @@ public class SelectController {
 
         //DAO에 있는 저장 함수 넣고 DB에 저장
         return selectService.confirmVisitAndUpdateCategory(historyDTO.getUser_id2(), historyDTO);
+    }
+  
+    @GetMapping({"/random", "/{selectCategoryName}"})
+    public ResponseEntity<ApiResponse<NaverLocalResponseDTO>> getRandomCategory(@RequestParam double latitude, @RequestParam double longitude, @PathVariable Optional<String> selectCategoryName) {
+        return selectService.getRandomCategory(latitude, longitude, selectCategoryName.orElse(null));
     }
 }
