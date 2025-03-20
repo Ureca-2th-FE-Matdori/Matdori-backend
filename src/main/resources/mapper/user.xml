@@ -40,5 +40,10 @@
     <select id="getTopRankingUsers" resultType="com.uplus.matdori.category.model.dto.UserDTO">
     	SELECT user_id, point FROM 회원정보 ORDER BY point DESC LIMIT 10
     </select>
+    
+    <!-- 특정 회원의 point 랭킹 조회 -->
+    <select id="getMyRanking" parameterType="java.lang.String" resultType="com.uplus.matdori.category.model.dto.MyRankingDTO">
+    	SELECT user_id, ranking FROM (SELECT user_id, point, RANK() OVER (ORDER BY point DESC) AS ranking FROM 회원정보) AS sortRank WHERE user_id = #{user_id};
+    </select>
 
 </mapper>
