@@ -1,5 +1,6 @@
 package com.uplus.matdori.category.controller;
 
+import com.uplus.matdori.category.model.dto.ApiResponse;
 import com.uplus.matdori.category.model.dto.HistoryDTO;
 import com.uplus.matdori.category.model.service.HistoryService;
 import org.springframework.http.ResponseEntity;
@@ -44,9 +45,9 @@ public class HistoryController {
         return ResponseEntity.ok("Rating Submitted Successfully");
     }
 
-    @DeleteMapping("/delete/{historyId}")
-    public ResponseEntity<String> deleteHistory(@PathVariable int historyId) {
-        historyService.deleteHistory(historyId);
-        return ResponseEntity.ok("History Deleted Successfully");
+    @DeleteMapping("/{historyId}/{user_id}")
+    public ResponseEntity<ApiResponse<Object>> deleteHistory(@PathVariable int historyId, 
+                                                             @PathVariable String user_id) {
+        return historyService.deleteHistory(historyId, user_id);
     }
 }
