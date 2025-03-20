@@ -8,4 +8,5 @@ public interface SelectService {
     NaverLocalResponseDTO getRandomCategory();
     void confirmVisitAndUpdateCategory(String userId, HistoryDTO history);
     String getPreferredCategory(String userId);
+    NaverLocalResponseDTO testSearchWithLocation(String categoryName);
 }

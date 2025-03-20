@@ -65,8 +65,8 @@ public class SelectServiceImp implements SelectService {
             return null;
         }
 
-        //searchPlaces() 메소드를 이용해서 상위 5개 음식점 정보를 돌려준다
-        return searchPlaces(categoryName);
+        //testSearchWithLocation() 메소드를 이용해서 위치+키워드 기반으로 상위 5개 음식점 정보를 돌려준다
+        return testSearchWithLocation(categoryName);
     }
 
     @Override
@@ -82,6 +82,19 @@ public class SelectServiceImp implements SelectService {
             }
         }
         return categoryDAO.search(bestCategory);
+    }
+
+    //위치 정보와 함께 키워드를 생성했다고 가정하고, 위치 기반으로 네이버 지역 검색 API를 호출하는 메소드 testSearchWithLocation()
+    public NaverLocalResponseDTO testSearchWithLocation(String categoryName) {
+        //1. 테스트용 임의의 위치 (멀캠 선릉 좌표)
+        double latitude = 37.504;
+        double longitude = 127.0493;
+
+        //2. 위치를 기반으로 키워드 생성 (ex. "선릉역 ${패스트푸드})
+        String keyword = "선릉역 " + categoryName;
+
+        //3. 네이버 지역 검색 API 호출
+        return searchPlaces(keyword);
     }
 
     //네이버 지역 검색 API를 호출하는 메소드 searchPlaces()
