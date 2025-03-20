@@ -70,4 +70,10 @@ public class SelectController {
     public ResponseEntity<ApiResponse<NaverLocalResponseDTO>> getRandomCategory(@RequestParam double latitude, @RequestParam double longitude, @PathVariable Optional<String> selectCategoryName) {
         return selectService.getRandomCategory(latitude, longitude, selectCategoryName.orElse(null));
     }
+    
+    @GetMapping("/prefer/{userId}")
+    public ResponseEntity<ApiResponse<NaverLocalResponseDTO>> getPreferCategory(@RequestParam double latitude, @RequestParam double longitude, @PathVariable String userId) {
+        String categoryName = selectService.getPreferredCategory(userId);
+    	return selectService.getRandomCategory(latitude, longitude, categoryName);
+    }
 }
