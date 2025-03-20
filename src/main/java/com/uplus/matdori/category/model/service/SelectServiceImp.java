@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -96,14 +97,26 @@ public class SelectServiceImp implements SelectService {
         UserDTO user = userDAO.getUserById(userId);
         List<Integer> categoryVisits = user.getCategoryVisits(); // List<Integer>로 변경
 
-        int maxVisits = 0, bestCategory = 1;
-        for (int i = 0; i < categoryVisits.size(); i++) { // .length → .size() 사용
-            if (categoryVisits.get(i) > maxVisits) { // 배열 인덱싱 → get(i) 사용
+        int maxVisits = 0;
+        List<Integer> bestCategories = new ArrayList<>();
+
+        // 가장 많이 방문한 카테고리 찾기
+        for (int i = 0; i < categoryVisits.size(); i++) {
+            if (categoryVisits.get(i) > maxVisits) {
                 maxVisits = categoryVisits.get(i);
-                bestCategory = i + 1;
+                bestCategories.clear(); // 새로운 최댓값이 나오면 리스트 초기화
+                bestCategories.add(i + 1); // 카테고리 번호는 1부터 시작
+            } else if (categoryVisits.get(i) == maxVisits) {
+                bestCategories.add(i + 1); // 동일한 최댓값이면 리스트에 추가
             }
         }
-        return categoryDAO.search(bestCategory);
+
+        // 랜덤으로 하나 선택
+        Random random = new Random();
+        int randomIndex = random.nextInt(bestCategories.size());
+        int selectedCategory = bestCategories.get(randomIndex);
+
+        return categoryDAO.search(selectedCategory);
     }
 
     public String getRegionName(double latitude, double longitude) {
