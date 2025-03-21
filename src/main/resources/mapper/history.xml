@@ -23,6 +23,11 @@
         VALUES (#{user_id2}, 0, #{url}, #{title}, #{roadAddress}, #{category_id2})
     </insert>
 
+    <!-- id를 통해서 해당하는 히스토리의 모든 정보 읽어오기 -->
+    <select id="findById" parameterType="int" resultType="com.uplus.matdori.category.model.dto.HistoryDTO">
+        SELECT * FROM 방문한_식당_히스토리 WHERE history_id = #{history_id}
+    </select>
+
     <!-- 평점 업데이트 -->
     <update id="updateRating" parameterType="com.uplus.matdori.category.model.dto.HistoryDTO">
         UPDATE 방문한_식당_히스토리
