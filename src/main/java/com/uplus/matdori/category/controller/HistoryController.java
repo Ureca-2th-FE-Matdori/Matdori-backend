@@ -38,9 +38,9 @@ public class HistoryController {
         this.historyService = historyService;
     }
 
-    @GetMapping("/getTable/{userId}")
-    public List<HistoryDTO> getUserHistory(@PathVariable String userId) {
-        return historyService.getUserHistory(userId);
+    @GetMapping("/{user_id}") 
+    public ResponseEntity<ApiResponse<List<HistoryDTO>>> getUserHistory(@PathVariable("user_id") String user_id) {
+        return historyService.getUserHistory(user_id);
     }
 
     //특정 id를 받아서

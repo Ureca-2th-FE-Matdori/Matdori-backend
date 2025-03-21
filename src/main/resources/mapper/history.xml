@@ -3,10 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.uplus.matdori.category.model.dao.HistoryDAO">
-
-    <!-- 회원별 방문한 식당 히스토리 조회 -->
-    <select id="getHistoryByUserId" parameterType="java.lang.String" resultType="com.uplus.matdori.category.model.dto.HistoryDTO">
-        SELECT * FROM 방문한_식당_히스토리 WHERE user_id2 = #{userId}
+	<!-- 회원별 방문한 식당 히스토리 조회 -->
+    <select id="getUserHistory" parameterType="java.lang.String" resultType="com.uplus.matdori.category.model.dto.HistoryDTO">
+    	SELECT * FROM 방문한_식당_히스토리 WHERE user_id2 = #{user_id};
     </select>
     
 	<!-- 회원 ID와 히스토리 ID를 이용해 조회 -->
