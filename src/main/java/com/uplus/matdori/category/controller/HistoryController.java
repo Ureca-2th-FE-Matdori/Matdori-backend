@@ -3,16 +3,20 @@ package com.uplus.matdori.category.controller;
 import com.uplus.matdori.category.model.dto.ApiResponse;
 import com.uplus.matdori.category.model.dto.HistoryDTO;
 import com.uplus.matdori.category.model.service.HistoryService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /*
  * @RestController
  *   RestFul Service를 위한 Conrtoller
  *   모든 메서드의 응답을  @ResponseBody를 붙여주는 효과
  */
+@Slf4j
 @RestController
 
 //RestFul에서 서비스할 자원(Domain)명을 붙인다
@@ -39,15 +43,15 @@ public class HistoryController {
         return historyService.getUserHistory(user_id);
     }
 
+    //특정 id를 받아서
     @PostMapping("/rate")
-    public ResponseEntity<String> rateHistory(@RequestBody HistoryDTO historyDTO) {
-        historyService.rateHistory(historyDTO);
-        return ResponseEntity.ok("Rating Submitted Successfully");
+    public ResponseEntity<ApiResponse<Object>> updateRate(@RequestParam int history_id, @RequestParam int rate) {
+        return historyService.rateHistory(history_id, rate); //성공했을 경우
     }
 
-    @DeleteMapping("/delete/{historyId}")
-    public ResponseEntity<String> deleteHistory(@PathVariable int historyId) {
-        historyService.deleteHistory(historyId);
-        return ResponseEntity.ok("History Deleted Successfully");
+    @DeleteMapping("/{historyId}/{user_id}")
+    public ResponseEntity<ApiResponse<Object>> deleteHistory(@PathVariable int historyId, 
+                                                             @PathVariable String user_id) {
+        return historyService.deleteHistory(historyId, user_id);
     }
 }
