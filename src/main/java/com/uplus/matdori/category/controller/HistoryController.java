@@ -49,9 +49,9 @@ public class HistoryController {
         return historyService.rateHistory(history_id, rate); //성공했을 경우
     }
 
-    @DeleteMapping("/delete/{historyId}")
-    public ResponseEntity<String> deleteHistory(@PathVariable int historyId) {
-        historyService.deleteHistory(historyId);
-        return ResponseEntity.ok("History Deleted Successfully");
+    @DeleteMapping("/{historyId}/{user_id}")
+    public ResponseEntity<ApiResponse<Object>> deleteHistory(@PathVariable int historyId, 
+                                                             @PathVariable String user_id) {
+        return historyService.deleteHistory(historyId, user_id);
     }
 }

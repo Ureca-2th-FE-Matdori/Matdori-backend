@@ -8,6 +8,14 @@
     <select id="getHistoryByUserId" parameterType="java.lang.String" resultType="com.uplus.matdori.category.model.dto.HistoryDTO">
         SELECT * FROM 방문한_식당_히스토리 WHERE user_id2 = #{userId}
     </select>
+    
+	<!-- 회원 ID와 히스토리 ID를 이용해 조회 -->
+	<select id="getHistoryByUserIdAndHistoryId" parameterType="com.uplus.matdori.category.model.dto.HistoryRequestDTO" 
+	        resultType="com.uplus.matdori.category.model.dto.HistoryDTO">
+	    SELECT * FROM 방문한_식당_히스토리
+	    WHERE user_id2 = #{user_id} AND history_id = #{history_id}
+	</select>
+
 
     <!-- 방문한 식당 기록 추가 -->
     <insert id="insertVisitHistory" parameterType="com.uplus.matdori.category.model.dto.HistoryDTO">
