@@ -8,14 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 import com.uplus.matdori.category.model.dao.HistoryDAO;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.uplus.matdori.category.model.dao.UserDAO;
 import com.uplus.matdori.category.model.dto.ApiResponse;
 import com.uplus.matdori.category.model.dto.HistoryDTO;
-import com.uplus.matdori.category.model.dto.HistoryRequestDTO;
 import com.uplus.matdori.category.model.dto.UserDTO;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.uplus.matdori.category.model.dto.HistoryRequestDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +34,6 @@ import static java.rmi.server.LogStream.log;
 public class HistoryServiceImp implements HistoryService {
     private final HistoryDAO historyDAO;
     private final UserDAO userDAO;
-
     private static final Logger logger = LoggerFactory.getLogger(SelectServiceImp.class);
 
     public HistoryServiceImp(HistoryDAO historyDAO, UserDAO userDAO) {
@@ -88,6 +87,17 @@ public class HistoryServiceImp implements HistoryService {
         // 기존 데이터의 rate를 업데이트
         history.setRate(rate);
         historyDAO.updateRating(history); // DB에 반영
+
+        // user_id가 존재하는지도 확인
+        UserDTO user = userDAO.getUserById(history.getUser_id2());
+
+        // history에 있는 user_id2 값이 유효하지 않아서, user를 제대로 못 불러온 경우
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("유효하지 않은 history_id 값이에요!"));
+        }
+
+        // 기존 user에서 point를 올려주고, 이를 DAO로 적용시킨다
+        userDAO.increaseUserPoint(history.getUser_id2());
 
         //success일 경우에는 Map.of() 넘겨서.. content는 빈 객체를 넘김
         return ResponseEntity.ok(ApiResponse.success(Map.of()));

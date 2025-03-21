@@ -32,4 +32,7 @@ public interface UserDAO {
 
     //특정 카테고리 방문 횟수 증가
     void incrementCategoryVisitCount(@Param("user_id") String userId, @Param("categoryId") int categoryId);
+
+    //특정 회원의 포인트 +5 증가
+    void increaseUserPoint(@Param("user_id") String user_id);
 }
