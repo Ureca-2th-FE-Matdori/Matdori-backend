@@ -11,11 +11,13 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 //히스토리 관련 DTO
 public class HistoryDTO {
-    private int history_id; // 방문 내역의 고유 ID (INT, PK)
-    private String user_id2; // 회원 ID (VARCHAR 10 / JSON의 "user_id" 값 매핑)
-    private int category_id2; // 카테고리 ID (INT / JSON의 "category_id" 값 매핑)
-    private String title; // 식당명
-    private String roadAddress; // 도로명 주소
-    private String url; // 식당 URL (TEXT)
-    private int rate = 0; // 평점 (INT / 기본값 0 설정)
+
+	private int history_id; // 히스토리 ID (INT / AUTO_INCREMENT)
+
+  private String user_id2; // 회원 ID (VARCHAR 10 / JSON의 "user_id" 값 매핑)
+  private int rate = 0; // 평점 (INT / 기본값 0 설정)
+  private String url; // 식당 URL (TEXT)
+  private String title; // 식당명 (VARCHAR(255))
+  private String roadAddress; // 주소 (VARCHAR(255))
+  private int category_id2; // 카테고리 ID (INT / JSON의 "category_id" 값 매핑)
 }

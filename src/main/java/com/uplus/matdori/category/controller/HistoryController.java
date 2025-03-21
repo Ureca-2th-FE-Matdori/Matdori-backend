@@ -38,9 +38,9 @@ public class HistoryController {
         this.historyService = historyService;
     }
 
-    @GetMapping("/getTable/{userId}")
-    public List<HistoryDTO> getUserHistory(@PathVariable String userId) {
-        return historyService.getUserHistory(userId);
+    @GetMapping("/{user_id}") 
+    public ResponseEntity<ApiResponse<List<HistoryDTO>>> getUserHistory(@PathVariable("user_id") String user_id) {
+        return historyService.getUserHistory(user_id);
     }
 
     //특정 id를 받아서
@@ -49,9 +49,9 @@ public class HistoryController {
         return historyService.rateHistory(history_id, rate); //성공했을 경우
     }
 
-    @DeleteMapping("/delete/{historyId}")
-    public ResponseEntity<String> deleteHistory(@PathVariable int historyId) {
-        historyService.deleteHistory(historyId);
-        return ResponseEntity.ok("History Deleted Successfully");
+    @DeleteMapping("/{historyId}/{user_id}")
+    public ResponseEntity<ApiResponse<Object>> deleteHistory(@PathVariable int historyId, 
+                                                             @PathVariable String user_id) {
+        return historyService.deleteHistory(historyId, user_id);
     }
 }
