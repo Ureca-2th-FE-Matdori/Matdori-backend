@@ -34,7 +34,7 @@ import java.util.Random;
  *     ==> 보안에 취약하므로 상용에서는 사용 안함
  *     ==> 이후에 Configuration을 통해 설정할 예정
  * */
-@CrossOrigin(origins = {"*"})
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 
 //뽑기 관련 컨트롤러
 @Slf4j
@@ -67,12 +67,12 @@ public class SelectController {
     }
   
     @GetMapping({"/random", "/{selectCategoryName}"})
-    public ResponseEntity<ApiResponse<NaverLocalResponseDTO>> getRandomCategory(@RequestParam double latitude, @RequestParam double longitude, @PathVariable Optional<String> selectCategoryName) {
+    public ResponseEntity<ApiResponse<NaverCategoryResponseDTO>> getRandomCategory(@RequestParam double latitude, @RequestParam double longitude, @PathVariable Optional<String> selectCategoryName) {
         return selectService.getRandomCategory(latitude, longitude, selectCategoryName.orElse(null));
     }
     
     @GetMapping("/prefer/{userId}")
-    public ResponseEntity<ApiResponse<NaverLocalResponseDTO>> getPreferCategory(@RequestParam double latitude, @RequestParam double longitude, @PathVariable String userId) {
+    public ResponseEntity<ApiResponse<NaverCategoryResponseDTO>> getPreferCategory(@RequestParam double latitude, @RequestParam double longitude, @PathVariable String userId) {
         String categoryName = selectService.getPreferredCategory(userId);
     	return selectService.getRandomCategory(latitude, longitude, categoryName);
     }

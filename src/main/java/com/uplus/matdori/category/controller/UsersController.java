@@ -16,7 +16,7 @@ import com.uplus.matdori.category.model.service.UsersService;
 
 @RequestMapping("/users")
 
-@CrossOrigin(origins = {"*"})
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 
 
 //회원 정보 관련 컨트롤러

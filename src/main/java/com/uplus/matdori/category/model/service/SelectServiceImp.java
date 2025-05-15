@@ -60,20 +60,20 @@ public class SelectServiceImp implements SelectService {
     //"랜덤한" 카테고리 ID 선택 후, 이를 이용해서 검색 정보 불러서 Client에 넘겨주는 메소드
     //네이버 지역 검색 API를 활용
     @Override
-    public ResponseEntity<ApiResponse<NaverLocalResponseDTO>> getRandomCategory(double latitude, double longitude, String selectCategoryName) {
+    public ResponseEntity<ApiResponse<NaverCategoryResponseDTO>> getRandomCategory(double latitude, double longitude, String selectCategoryName) {
         try {
-            if (selectCategoryName == null) {
+            String categoryName; // 카테고리 이름 저장할 변수
+
+            if (selectCategoryName == null) { // 완전 랜덤 뽑기를 해야 하는 경우
                 int randomId = random.nextInt(15) + 1; // 1~15 랜덤 숫자 생성
-                String categoryName = categoryDAO.search(randomId); // 랜덤 ID에 해당하는 카테고리명 조회 
+                categoryName = categoryDAO.search(randomId); // 랜덤 ID에 해당하는 카테고리명 조회
 
                 // 카테고리명이 비어있다면 404 반환
                 if (categoryName == null) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND)
                             .body(ApiResponse.error("카테고리를 찾을 수 없습니다."));
                 }
-                //testSearchWithLocation() 메소드를 이용해서 위치+키워드 기반으로 상위 5개 음식점 정보를 돌려준다
-                return ResponseEntity.ok(ApiResponse.success(testSearchWithLocation(categoryName, latitude, longitude)));
-            } else {
+            } else { // 카테고리명이 넘어온 경우
                 // 카테고리 존재 여부 확인
                 Integer categoryId = categoryDAO.checkCategoryName(selectCategoryName);
 
@@ -82,10 +82,17 @@ public class SelectServiceImp implements SelectService {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(ApiResponse.error("존재하지 않는 카테고리입니다."));
                 }
-
-                // 검색 결과 반환
-                return ResponseEntity.ok(ApiResponse.success(testSearchWithLocation(selectCategoryName, latitude, longitude)));
+                categoryName = selectCategoryName;
             }
+
+            // 검색 결과를 가져와서 localResponse에 값 할당
+            NaverLocalResponseDTO localResponse = testSearchWithLocation(categoryName, latitude, longitude);
+
+            //category 명까지 추가한 응답으로 가공
+            NaverCategoryResponseDTO responseDTO = new NaverCategoryResponseDTO(categoryName, localResponse);
+
+            // 검색 결과 반환
+            return ResponseEntity.ok(ApiResponse.success(responseDTO));
         } catch (Exception e) {
 	         throw new RuntimeException(e);
 	      }

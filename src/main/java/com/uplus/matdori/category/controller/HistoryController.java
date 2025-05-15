@@ -29,7 +29,7 @@ import java.util.Map;
  *     ==> 보안에 취약하므로 상용에서는 사용 안함
  *     ==> 이후에 Configuration을 통해 설정할 예정
  * */
-@CrossOrigin(origins = {"*"})
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 //히스토리 관련 컨트롤러
 public class HistoryController {
     private final HistoryService historyService;
