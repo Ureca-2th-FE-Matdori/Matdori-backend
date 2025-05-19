@@ -66,9 +66,9 @@ public class SelectController {
         return selectService.confirmVisitAndUpdateCategory(historyDTO.getUser_id2(), historyDTO);
     }
   
-    @GetMapping({"/random", "/{selectCategoryName}"})
-    public ResponseEntity<ApiResponse<NaverCategoryResponseDTO>> getRandomCategory(@RequestParam double latitude, @RequestParam double longitude, @PathVariable Optional<String> selectCategoryName) {
-        return selectService.getRandomCategory(latitude, longitude, selectCategoryName.orElse(null));
+    @GetMapping({"/random", ""})
+    public ResponseEntity<ApiResponse<NaverCategoryResponseDTO>> getRandomCategory(@RequestParam double latitude, @RequestParam double longitude, @RequestParam(required = false) String selectCategoryName) {
+        return selectService.getRandomCategory(latitude, longitude, selectCategoryName);
     }
     
     @GetMapping("/prefer/{userId}")

@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 //히스토리 관련 DTO
 public class HistoryDTO {
 
-	private int history_id; // 히스토리 ID (INT / AUTO_INCREMENT)
+  private int history_id; // 히스토리 ID (INT / AUTO_INCREMENT)
 
   private String user_id2; // 회원 ID (VARCHAR 10 / JSON의 "user_id" 값 매핑)
   private int rate = 0; // 평점 (INT / 기본값 0 설정)

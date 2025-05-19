@@ -226,9 +226,10 @@ public class SelectServiceImp implements SelectService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("유저를 찾을 수 없어요"));
         }
 
-        //2. 특정 카테고리 방문 횟수 증가 (DTO 내부에서)
+        //2. 특정 카테고리 방문 횟수 증가 및 점수 증가 (DTO 내부에서)
         int categoryId = history.getCategory_id2();
         user.incrementCategoryVisitCount(categoryId);
+        userDAO.increaseUserPoint(userId);
 
         //3. 변경된 정보를 DB에 반영
         userDAO.incrementCategoryVisitCount(userId, categoryId);
