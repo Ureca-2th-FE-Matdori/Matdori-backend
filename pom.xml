@@ -62,6 +62,13 @@
 			<version>3.0.4</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Lombok 추가 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.32</version>  <!-- 최신 버전 확인 후 변경 가능 -->
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
